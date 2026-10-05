@@ -8,12 +8,13 @@ cd "$(dirname "$0")"
 name="${1:?App name required}"
 package="${2:?Package name required}"
 slug="${3:-$(echo "$name" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-|-$//g')}"
+name_url="${name// /%20}"
 date="$(date '+%B %-d, %Y')"
 out="$slug/privacy-policy/index.html"
 
 [ -e "$out" ] && { echo "Exists: $out"; exit 1; }
 mkdir -p "$slug/privacy-policy"
-sed -e "s|{{APP_NAME}}|$name|g" -e "s|{{PACKAGE}}|$package|g" -e "s|{{DATE}}|$date|g" \
+sed -e "s|{{APP_NAME_URL}}|$name_url|g" -e "s|{{APP_NAME}}|$name|g" -e "s|{{PACKAGE}}|$package|g" -e "s|{{DATE}}|$date|g" \
   _template/privacy-policy.html > "$out"
 
 entry="    <li class=\"card\"><strong>$name</strong> <a href=\"/$slug/privacy-policy/\">Privacy Policy</a></li>"
